@@ -1,24 +1,9 @@
 /* Taken from Maxim example:
  * http://www.maximintegrated.com/app-notes/index.mvp/id/126
  */
-#include "stm32f10x.h"
-#include "stm32f10x_tim.h"
 
-#include "stm32_dunks_lib.h"
+#include "ds18s20.h"
 
-
-/* Find all ds18b20 sensor addresses on 1-wire bus. */
-int enumerate_sensors(void){
-    u32 rslt = OWFirst();
-    int count = 0;
-    while(rslt){
-        ++count;
-        // TODO: copy ROM_NO to buffer.
-        rslt = OWNext();
-    }
-    return count;
-    
-}
 
 uint64_t read_temp(int* error){
     static uint64_t count;
@@ -61,7 +46,7 @@ uint64_t read_temp(int* error){
     for (i = 0; i < 8; ++i){
         OWWriteByte(ROM_NO[i]);
     }
-    // and start conversion.
+    // Start new conversion.
     OWWriteByte(0x44);
 
     return temp;
@@ -87,24 +72,30 @@ uint8_t ds_crc(uint64_t data)
     return(shift_reg);
 }
 
-output* PORTADDRESS = 0;
+Port_Container_t* PORTADDRESS = 0;
 u32 gpio_pin_output;
 u32 gpio_pin_input;
-void initPort(output* portaddr){
+
+void one_wire_init_port(Port_Container_t* portaddr){
+    if(PORTADDRESS == portaddr){
+        // Allready set to this port.
+        return;
+    }
+
     // Maxim code expects this GPIO pin define.
     PORTADDRESS = portaddr;
 
     // Configure GPIO.
-    portaddr->type = BINARY_OUT_OD;
-    IO_Init(portaddr);
-    IO_off_p(portaddr);
+//    portaddr->type = BINARY_OUT_OD;
+//    IO_Init(portaddr);
+    io_off_p(portaddr);
 
     // Set these values to be used toggling tristate pin between input and output
     // in outp().
-    gpio_pin_input = (u32)(0x4 << (8 * get_GPIO_pin_num_from_p(portaddr)));
-    gpio_pin_output = (u32)(0x1 << (8 * get_GPIO_pin_num_from_p(portaddr)));
+    gpio_pin_input = (u32)(0x4 << (8 * GPIO_pin_num[portaddr->port_number]));
+    gpio_pin_output = (u32)(0x1 << (8 * GPIO_pin_num[portaddr->port_number]));
 
-    // Set GPIO high readt for 1-wire communications.
+    // Set GPIO high ready for 1-wire communications.
     outp(portaddr, 1);
 }
 
@@ -112,7 +103,7 @@ void initPort(output* portaddr){
  * If high, we set the GPIO pin to open drain input and use an external pull-up resistor.
  * If low, we set GPIO pin to output. Pin should already have been set low duting initPort(). 
  */
-void outp(output* portaddr, u32 val){
+void outp(Port_Container_t* portaddr, u32 val){
     if(val){
         // Release pin.
         // This needs to happen as quickly as posible so we do not use the standard pin configuration functions
@@ -122,7 +113,7 @@ void outp(output* portaddr, u32 val){
         //portaddr->type = BINARY_IN_OD;
         //IO_Init(portaddr);
 
-        get_GPIO_bank_from_p(portaddr)->CRL = gpio_pin_input;
+        GPIO_bank[portaddr->port_number]->CRL = gpio_pin_input;
         //GPIOC->CRL = 0x4;
 
     } else {
@@ -130,14 +121,14 @@ void outp(output* portaddr, u32 val){
 
         //portaddr->type = BINARY_OUT_OD;
         //IO_Init(portaddr);
-        //IO_off_p(portaddr);
+        //io_off_p(portaddr);
 
-        get_GPIO_bank_from_p(portaddr)->CRL = gpio_pin_output;
+        GPIO_bank[portaddr->port_number]->CRL = gpio_pin_output;
     }
 }
 
-u32 inp(output* portaddr){
-    return IO_read_p(portaddr);
+inline u32 inp(Port_Container_t* portaddr){
+    return io_read_p(portaddr);
 }
 
 // Pause for exactly 'tick' number of ticks = 0.25us

@@ -22,6 +22,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
+#include "stm32_io.h"  // _PWMBitbanged()
 /** @addtogroup Demo
   * @{
   */
@@ -135,6 +136,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
     ++systick_triggered;
+    _PWMBitbanged();
 }
 
 /******************************************************************************/

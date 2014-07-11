@@ -1,314 +1,87 @@
-#ifndef __STM32F100_io_pins_H
-#define __STM32F100_io_pins_H
+#ifndef __STM32F100_io_enum_H
+#define __STM32F100_io_enum_H
 
-#include "stm32f10x_tim.h"
-
-static GPIO_TypeDef* GPIO_bank[] = {
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOA,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOB,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC,
-    GPIOC
-};
-
-static uint16_t GPIO_pin[] = {
-    GPIO_Pin_0,
-    GPIO_Pin_1,
-    GPIO_Pin_2,
-    GPIO_Pin_3,
-    GPIO_Pin_4,
-    GPIO_Pin_5,
-    GPIO_Pin_6,
-    GPIO_Pin_7,
-    GPIO_Pin_8,
-    GPIO_Pin_9,
-    GPIO_Pin_10,
-    GPIO_Pin_11,
-    GPIO_Pin_12,
-    GPIO_Pin_13,
-    GPIO_Pin_14,
-    GPIO_Pin_15,
-    GPIO_Pin_0,
-    GPIO_Pin_1,
-    GPIO_Pin_2,
-    GPIO_Pin_3,
-    GPIO_Pin_4,
-    GPIO_Pin_5,
-    GPIO_Pin_6,
-    GPIO_Pin_7,
-    GPIO_Pin_8,
-    GPIO_Pin_9,
-    GPIO_Pin_10,
-    GPIO_Pin_11,
-    GPIO_Pin_12,
-    GPIO_Pin_13,
-    GPIO_Pin_14,
-    GPIO_Pin_15,
-    GPIO_Pin_0,
-    GPIO_Pin_1,
-    GPIO_Pin_2,
-    GPIO_Pin_3,
-    GPIO_Pin_4,
-    GPIO_Pin_5,
-    GPIO_Pin_6,
-    GPIO_Pin_7,
-    GPIO_Pin_8,
-    GPIO_Pin_9,
-    GPIO_Pin_10,
-    GPIO_Pin_11,
-    GPIO_Pin_12,
-    GPIO_Pin_13,
-    GPIO_Pin_14,
-    GPIO_Pin_15
-};
-
-static uint8_t GPIO_pin_num[] = {
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    0xa,
-    0xb,
-    0xc,
-    0xd,
-    0xe,
-    0xf,
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    0xa,
-    0xb,
-    0xc,
-    0xd,
-    0xe,
-    0xf,
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    0xa,
-    0xb,
-    0xc,
-    0xd,
-    0xe,
-    0xf
-};
-
-static uint32_t GPIO_clk[] = {
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOA,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOB,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC,
-    RCC_APB2Periph_GPIOC
-};
-
-sc32 PortTimer[][2] = {
-    {(u32)TIM2, 1},  // A0  TIM2_CH1
-    {(u32)TIM2, 2},  // A1  TIM2_CH2
-    {0   , 0},  // A2  TIM2_CH3   alt: TIM15_CH1
-    {0   , 0},  // A3  TIM2_CH4   alt: TIM15_CH2
-    {0   , 0},  // A4
-    {0   , 0},  // A5  
-    {(u32)TIM3, 1},  // A6  TIM3_CH1
-    {(u32)TIM3, 2},  // A7  TIM3_CH2
-    {(u32)TIM1, 1},  // A8  TIM1_CH1
-    {(u32)TIM1, 2},  // A9  TIM1_CH2
-    {(u32)TIM1, 3},  // A10  TIM1_CH3
-    {(u32)TIM1, 4},  // A11  TIM1_CH4
-    {0   , 0},  // A12
-    {0   , 0},  // A13
-    {0   , 0},  // A14
-    {0   , 0},  // A15
-    {(u32)TIM3, 3},  // B0  TIM3_CH3
-    {(u32)TIM3, 4},  // B1  TIM3_CH4
-    {0   , 0},  // B2  
-    {0   , 0},  // B3              alt: TIM2_CH2
-    {0   , 0},  // B4              alt: TIM3_CH1
-    {0   , 0},  // B5              alt: TIM3_CH2
-    {(u32)TIM4, 1},  // B6  TIM4_CH1
-    {(u32)TIM4, 2},  // B7  TIM4_CH2
-    {(u32)TIM4, 3},  // B8  TIM4_CH3
-    {(u32)TIM4, 4},  // B9  TIM4_CH4
-    {0   , 0},  // B10            alt: TIM2_CH3
-    {0   , 0},  // B11            alt: TIM2_CH4  
-    {0   , 0},  // B12  
-    {0   , 0},  // B13
-    {0   , 0},  // B14            alt: TIM15_CH1
-    {0   , 0},  // B15            alt: TIM15_CH1
-    {0   , 0},  // C0  
-    {0   , 0},  // C1
-    {0   , 0},  // C2
-    {0   , 0},  // C3
-    {0   , 0},  // C4
-    {0   , 0},  // C5
-    {0   , 0},  // C6            alt: TIM3_CH1
-    {0   , 0},  // C7            alt: TIM3_CH2
-    {0   , 0},  // C8            alt: TIM3_CH3
-    {0   , 0},  // C9            alt: TIM3_CH4
-    {0   , 0},  // C10
-    {0   , 0},  // C11
-    {0   , 0},  // C12
-    {0   , 0},  // C13
-    {0   , 0},  // C14
-    {0   , 0},  // C15
-};
-
-sc32 PortTimerAlt[][2] = {
-    {0   , 0},  // A0  TIM2_CH1
-    {0   , 0},  // A1  TIM2_CH2
-    {(u32)TIM15, 1},  // A2  TIM2_CH3   alt: TIM15_CH1
-    {(u32)TIM15, 2},  // A3  TIM2_CH4   alt: TIM15_CH2
-    {0   , 0},  // A4
-    {0   , 0},  // A5  
-    {0   , 0},  // A6  TIM3_CH1
-    {0   , 0},  // A7  TIM3_CH2
-    {0   , 0},  // A8  TIM1_CH1
-    {0   , 0},  // A9  TIM1_CH2
-    {0   , 0},  // A10  TIM1_CH3
-    {0   , 0},  // A11  TIM1_CH4
-    {0   , 0},  // A12
-    {0   , 0},  // A13
-    {0   , 0},  // A14
-    {0   , 0},  // A15
-    {0   , 0},  // B0  TIM3_CH3
-    {0   , 0},  // B1  TIM3_CH4
-    {0   , 0},  // B2  
-    {(u32)TIM2, 2},  // B3              alt: TIM2_CH2
-    {(u32)TIM3, 1},  // B4              alt: TIM3_CH1
-    {(u32)TIM3, 2},  // B5              alt: TIM3_CH2
-    {0   , 0},  // B6  TIM4_CH1
-    {0   , 0},  // B7  TIM4_CH2
-    {0   , 0},  // B8  TIM4_CH3
-    {0   , 0},  // B9  TIM4_CH4
-    {(u32)TIM2, 3},  // B10            alt: TIM2_CH3
-    {(u32)TIM2, 4},  // B11            alt: TIM2_CH4  
-    {0   , 0},  // B12  
-    {(u32)TIM15, 1},  // B13
-    {(u32)TIM15, 2},  // B14            alt: TIM15_CH1
-    {0   , 0},  // B15            alt: TIM15_CH2
-    {0   , 0},  // C0  
-    {0   , 0},  // C1
-    {0   , 0},  // C2
-    {0   , 0},  // C3
-    {0   , 0},  // C4
-    {0   , 0},  // C5
-    {(u32)TIM3, 1},  // C6            alt: TIM3_CH1
-    {(u32)TIM3, 2},  // C7            alt: TIM3_CH2
-    {(u32)TIM3, 3},  // C8            alt: TIM3_CH3
-    {(u32)TIM3, 4},  // C9            alt: TIM3_CH4
-    {0   , 0},  // C10
-    {0   , 0},  // C11
-    {0   , 0},  // C12
-    {0   , 0},  // C13
-    {0   , 0},  // C14
-    {0   , 0},  // C15
-};
+#include <stdint.h>
+#include "stm32f10x.h"
 
 
+typedef enum {
+    BINARY_OUT_PP = 0,
+    BINARY_OUT_OD = 1,
+    PWM = 2,
+    PWM_BITBANG = 3,
+    BINARY_IN_PU = 4,
+    BINARY_IN_PD = 5,
+    BINARY_IN_OD = 6,
+    SERIAL_1_WIRE = 7,
+    TEST = 0xff,
+} port_type_t;
 
-#endif
+typedef enum {
+    DATA_SIZE_PWM = 1,
+    DATA_SIZE_OUT = 1,
+    DATA_SIZE_D_IN = 1,
+    DATA_SIZE_A_IN = 1,
+    DATA_SIZE_1_WIRE = 0,
+} port_data_size;
+
+typedef enum {
+    PortA0 = 0,
+    PortA1 = 1,
+    PortA2 = 2,
+    PortA3 = 3,
+    PortA4 = 4,
+    PortA5 = 5,
+    PortA6 = 6,
+    PortA7 = 7,
+    PortA8 = 8,
+    PortA9 = 9,
+    PortA10 = 10,
+    PortA11 = 11,
+    PortA12 = 12,
+    PortA13 = 13,
+    PortA14 = 14,
+    PortA15 = 15,
+    PortB0 = 16,
+    PortB1 = 17,
+    PortB2 = 18,
+    PortB3 = 19,
+    PortB4 = 20,
+    PortB5 = 21,
+    PortB6 = 22,
+    PortB7 = 23,
+    PortB8 = 24,
+    PortB9 = 25,
+    PortB10 = 26,
+    PortB11 = 27,
+    PortB12 = 28,
+    PortB13 = 29,
+    PortB14 = 30,
+    PortB15 = 31,
+    PortC0 = 32,
+    PortC1 = 33,
+    PortC2 = 34,
+    PortC3 = 35,
+    PortC4 = 36,
+    PortC5 = 37,
+    PortC6 = 38,
+    PortC7 = 39,
+    PortC8 = 40,
+    PortC9 = 41,
+    PortC10 = 42,
+    PortC11 = 43,
+    PortC12 = 44,
+    PortC13 = 45,
+    PortC14 = 46,
+    PortC15 = 47,
+} port_numbers_t;
+
+extern GPIO_TypeDef* GPIO_bank[48];
+extern const port_data_size port_type_data_size[];
+extern const uint16_t GPIO_pin[];
+extern const uint8_t GPIO_pin_num[];
+extern const uint32_t GPIO_clk[];
+extern sc32 PortTimerAlt[][2];
+extern sc32 PortTimer[][2];
+
+#endif  // __STM32F100_io_enum_H
