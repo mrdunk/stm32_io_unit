@@ -148,10 +148,10 @@ SECTIONS
     ._heap :
     {
         . = ALIGN(4);
-        _sheap = .;
+        _HEAP_START = .;
         . = . + _heap_size;
         . = ALIGN(4);
-        _eheap = .;
+        _HEAP_END = .;
     } >ram
     ._stack :
     {
