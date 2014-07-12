@@ -14,13 +14,13 @@ To do this we need to query the linker output to see where it has stored variabl
 
 
 
-Build the firmware:
-    $ make TOOLCHAIN_PATH=~/Working/EmbeddedArm/gcc-arm-none-eabi-4_8-2014q1/bin/ 
+    Build the firmware:
+        $ make TOOLCHAIN_PATH=~/Working/EmbeddedArm/gcc-arm-none-eabi-4_8-2014q1/bin/ 
 
-Flash to STM32:
-    $ ~/Working/git/stlink.git/st-flash write v1 ./Demo.bin 0x8000000
+    Flash to STM32:
+        $ ~/Working/git/stlink.git/st-flash write v1 ./Demo.bin 0x8000000
 
-Instructions to read directly from memory:
+    Instructions to read directly from memory:
     containers:
         Get addresses with:
             $ CONTAINERS=0x$(/home/duncan/Working/EmbeddedArm/gcc-arm-none-eabi-4_8-2014q1/bin/arm-none-eabi-readelf -a ./Demo.elf |grep containers |awk '{ print $2; }')
@@ -42,6 +42,6 @@ Instructions to read directly from memory:
             $ echo $SIZE
 
         and the same address +4 will get the full array:
-            $ let DATA=$DATA+4
+            $ let DATA=$DATA+4; DATA=0x$(echo "obase=16; $DATA" | bc); echo $DATA
             $ ~/Working/git/stlink.git/st-flash read v1 /tmp/out.1 $DATA $SIZE
             $ hexdump -e '1/4 " %08x""\n"' /tmp/out.1
