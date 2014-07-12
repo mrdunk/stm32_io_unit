@@ -17,6 +17,7 @@ void io_register(char descrip[DESCRIPTION_LEN], port_type_t type, port_numbers_t
     if(init){
         init = 0;
         memset(containers, 0, sizeof(Port_Container_t) * MAX_CONTAINERS);
+        container_size = sizeof(Port_Container_t);
     }
 
     // Lookup expected data_size for this port type.

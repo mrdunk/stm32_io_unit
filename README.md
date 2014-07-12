@@ -9,15 +9,39 @@ Firmware to turn the STMVLDiscovery into a USB IO extender capable of being cont
 
 
 Rather than connect a USB to Serial converter to the dev board, we read data directly from memory using the programmer.
-To do this we need to put the data in a known location in memory. As we do not intend to use maloc (or any other dynamic memory alocation) it is safe to use th linkers "_sheap" variable to assign a starting address for date we need to read later.
+To do this we need to query the linker output to see where it has stored variables in memory:
+    $ /home/duncan/Working/EmbeddedArm/gcc-arm-none-eabi-4_8-2014q1/bin/arm-none-eabi-readelf -a ./Demo.elf | grep container
 
 
 
-Instructions to build and work out start of data array for stlink to read:
-make TOOLCHAIN_PATH=~/Working/EmbeddedArm/gcc-arm-none-eabi-4_8-2014q1/bin/ -f ./Makefile.Demo && /home/duncan/Working/EmbeddedArm/gcc-arm-none-eabi-4_8-2014q1/bin/arm-none-eabi-readelf -a ./Demo.elf  | grep _heap | head -n1 |awk '{ print $5; }' > heap_start && echo done
+Build the firmware:
+    $ make TOOLCHAIN_PATH=~/Working/EmbeddedArm/gcc-arm-none-eabi-4_8-2014q1/bin/ 
 
-Instructions to flash:
-$ ./st-flash write v1 ~/Working/git/stm32_io_unit/Demo.bin 0x8000000
+Flash to STM32:
+    $ ~/Working/git/stlink.git/st-flash write v1 ./Demo.bin 0x8000000
 
 Instructions to read directly from memory:
-$ ./st-flash read /dev/stlinkv1_2 out.1 0x`cat ~/Working/git/stm32_io_unit/heap_start` 80 && hexdump -v out.1
+    containers:
+        Get addresses with:
+            $ CONTAINERS=0x$(/home/duncan/Working/EmbeddedArm/gcc-arm-none-eabi-4_8-2014q1/bin/arm-none-eabi-readelf -a ./Demo.elf |grep containers |awk '{ print $2; }')
+            $ echo $CONTAINERS
+
+        Read from that address with:
+            $ ~/Working/git/stlink.git/st-flash read v1 /tmp/out.1 $CONTAINERS 0x150
+
+        Format according to struct Port_Container:
+            $ hexdump -v -e '12/1 "%_p""\t" 2/1 " %03d" 2/1 " %00x" 3/4 " %08x""\n"' /tmp/out.1
+
+        From here, the 1st 32bit number is the pointer to the data array with the first u32 of that array containg the size.
+            $ DATA=0x$(hexdump -e '12/1 "%_p""\t" 2/1 " %03d" 2/1 " %00x" 3/4 " %08x""\n"' /tmp/out.1 | grep 1wire | awk '{ print $6; }')
+            $ echo $DATA
+
+        The first 32 bits of the data aray contain the array size:
+            $ ~/Working/git/stlink.git/st-flash read v1 /tmp/out.1 $DATA 4
+            $ SIZE=0x$(hexdump -e '1/4 "%08x""\n"' /tmp/out.1)
+            $ echo $SIZE
+
+        and the same address +4 will get the full array:
+            $ let DATA=$DATA+4
+            $ ~/Working/git/stlink.git/st-flash read v1 /tmp/out.1 $DATA $SIZE
+            $ hexdump -e '1/4 " %08x""\n"' /tmp/out.1

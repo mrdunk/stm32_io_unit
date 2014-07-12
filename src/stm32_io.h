@@ -36,6 +36,7 @@ typedef struct Port_Container Port_Container_t;
 
 /* Array containing all registered IO pins. */
 Port_Container_t containers[MAX_CONTAINERS];
+u32 container_size;
 
 
 /* Register IO instance.
