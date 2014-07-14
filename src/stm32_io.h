@@ -1,12 +1,10 @@
 #ifndef __STM32_IO_H
 #define __STM32_IO_H
 
-//#include <stdlib.h>
 
 #include "stm32f10x.h"
 #include "stm32f100_io_pins.h"
 #include "stm32f10x_tim.h"
-//#include "ds18s20.h"
 
 #include <stdint.h>
 

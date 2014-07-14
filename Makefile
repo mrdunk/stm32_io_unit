@@ -75,6 +75,7 @@ OBJ = $(SRC:%.c=%.o) $(ASRC:%.s=%.o)
 
 CC=$(TOOLCHAIN_PATH)/$(TOOLCHAIN_PREFIX)-gcc
 LD=$(TOOLCHAIN_PATH)/$(TOOLCHAIN_PREFIX)-gcc
+READELF=$(TOOLCHAIN_PATH)/$(TOOLCHAIN_PREFIX)-readelf 
 OBJCOPY=$(TOOLCHAIN_PATH)/$(TOOLCHAIN_PREFIX)-objcopy
 AS=$(TOOLCHAIN_PATH)/$(TOOLCHAIN_PREFIX)-as
 AR=$(TOOLCHAIN_PATH)/$(TOOLCHAIN_PREFIX)-ar
@@ -85,6 +86,7 @@ all: $(OBJ)
 	$(CC) -o $(TARGET).elf $(LDFLAGS) $(OBJ)	$(LDLIBS)
 	$(OBJCOPY) -O ihex   $(TARGET).elf $(TARGET).hex
 	$(OBJCOPY) -O binary $(TARGET).elf $(TARGET).bin
+	$(READELF) -a $(TARGET).elf > $(TARGET).elf.txt
 
 .PHONY: clean
 
@@ -93,3 +95,4 @@ clean:
 	rm -f $(TARGET).elf
 	rm -f $(TARGET).hex
 	rm -f $(TARGET).bin
+	rm -f $(TARGET).elf.txt
