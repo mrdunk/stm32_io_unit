@@ -1,4 +1,5 @@
-#!/bin/sh
+
+# Bash funtions to build JSON object.
 
 compile_JSON() {
     FILENAME=$1

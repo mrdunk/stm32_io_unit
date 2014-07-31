@@ -1,4 +1,3 @@
-#!/bin/sh
 
 get_hostname(){
     HOSTNAME=$(hostname) 2> /dev/null

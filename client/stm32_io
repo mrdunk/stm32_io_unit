@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# Requires the OpenWRT rpcd module to be installed.
+
+
+source /usr/share/libubox/jshn.sh  # https://dev.openwrt.org/browser/trunk/package/jshn/example.txt?rev=25652
+
+case "$1" in
+	list)
+		echo '{ "read": { "label": "test_label" }, "write": { "label": "test_label", "data": 128 } }'
+	;;
+	call)
+		case "$2" in
+			read)
+				# read the arguments
+				read input;
+
+				logger -t "read" "call" "$2" "$input"
+			
+				json_load $input
+				json_get_var LABEL label
+				
+				if [[ -z "$LABEL" ]]; then
+					logger -t "LABEL" "not set"
+					echo '{ "staus": "ERROR", "message": "\"label\" not set." }'
+				else
+					OUTPUT=$(read_data.sh -l "$LABEL")
+					OUTPUT="{'results':$OUTPUT}"
+					echo "$OUTPUT"
+				fi
+			;;
+			write)
+				# read the arguments
+				read input;
+				
+				logger -t "write" "call" "$2" "$input"
+				
+				json_load $input 
+				json_get_var LABEL label
+				json_get_var DATA data
+				
+				if [[ -z "$LABEL" ]]; then 
+					logger -t "LABEL" "not set" 
+					echo '{ "staus": "ERROR", "message": "label not set." }' 
+				elif [[ -z "$DATA" ]]; then
+					logger -t "DATA" "not set"
+					echo '{ "staus": "ERROR", "message": "data not set."  }'
+				else
+					OUTPUT=$(read_data.sh -l "$LABEL" -d "$DATA")
+					echo "$OUTPUT"
+				fi
+				
+			;;
+		esac
+	;;
+esac
