@@ -166,7 +166,7 @@ if [ "$CONTAINER_TYPE" == "007" ]; then
 
     # Send it to the server if requested, otherwise to stdout.
     if [ "$DO_CURL" = true ]; then
-        curl -X POST -d @/tmp/stm32_$CONTAINER_LABEL.json http://$DBHOST:1080/1.0/event/put
+        curl -X POST -d @/tmp/stm32_$CONTAINER_LABEL.json http://$DBHOST:55555/put
     else
         cat /tmp/stm32_$CONTAINER_LABEL.json
     fi
@@ -229,7 +229,7 @@ elif [[ "$CONTAINER_TYPE" == "000" || "$CONTAINER_TYPE" == "001" ]]; then
 
         # Send it to the server if requested, otherwise to stdout.
         if [ "$DO_CURL" = true ]; then
-            curl -X POST -d @/tmp/stm32_$CONTAINER_LABEL.json http://$DBHOST:1080/1.0/event/put
+            curl -X POST -d @/tmp/stm32_$CONTAINER_LABEL.json http://$DBHOST:55555/put
         else
             cat /tmp/stm32_$CONTAINER_LABEL.json
         fi

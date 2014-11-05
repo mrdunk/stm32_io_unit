@@ -22,4 +22,4 @@ while read LINE; do
 done < $DHCPFILE
 close_JSON $OUTFILE
 
-curl -X POST -d @$OUTFILE http://$DBHOST:1080/1.0/event/put
+curl -X POST -d @$OUTFILE http://$DBHOST:55555/put
